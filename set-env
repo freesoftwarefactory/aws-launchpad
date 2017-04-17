@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# important: set accesskey and accessSecret and region in:
+# 	~/.aws/credentials y ~/.aws/config
+PROFILE=default
+
+# the account number to be used
+ACCOUNT_ID=99999999999
+
+# the default region to be used
+REGION=us-west-2
+
+# the default role used by the aws create-lambda command.
+ROLE=arn:aws:iam::999999999999:role/SomeRole
+

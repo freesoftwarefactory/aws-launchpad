@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# THIS SCRIPT SHOULD BE EXECUTED INSIDE THE 'lambda' DIRECTORY
+# PUT A SYMLINK AND RUN IT FROM THAT LOCATION.
+
+curdir=$(pwd)
+
+# create a directory. the dir name must be the same as your lambda function 
+mkdir $1
+cd $1
+
+# creates the remote lambda function
+ln -s ../../bin/create-lambda create
+
+# update the remote lambda code
+ln -s ../../bin/update-lambda update
+
+# execute the lambda function using a local simple simulator
+ln -s ../../bin/local-execute-lambda execute
+
+# a text file named: 'event' should be present on which set the input 
+echo "{ 
+	\"params\" : { \"someparam\" : \"welcome!\" },
+	\"body\" : \"some=thing&sample=formdata\"
+}
+" >> event
+
+mkdir src
+
+echo " 
+exports.handler = (event, context, callback) => {
+	// TODO your function body. when finished: callback(null,'SOMETHING');
+	callback(null,\"hello world!, event.params.someparam is:\"+event.params.someparam);
+};
+" >> src/index.js
+
+echo " 
+{
+  \"name\": \"src\",
+  \"version\": \"1.0.0\",
+  \"description\": \"\",
+  \"main\": \"index.js\",
+  \"dependencies\" : {
+  	\"aws-sdk\" : \"*\"
+ },
+  \"author\": \"Your Name\",
+  \"license\": \"ISC\"
+}
+" >> src/package.json
+
+cd $curdir
+

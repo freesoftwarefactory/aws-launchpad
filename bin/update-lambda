@@ -1,0 +1,12 @@
+source ./../../set-env
+
+curdir=$(pwd)
+module=${PWD##*/}	#toma nombre del directorio
+deploy=/tmp/$module-deploy.zip
+
+cd "./src"; zip -rq $deploy . -x "node_modules/aws-sdk/*"; cd $curdir
+
+unzip -v $deploy
+
+aws lambda update-function-code --function-name $module --zip-file fileb:///$deploy
+rm $deploy

@@ -1,0 +1,22 @@
+source ./../../set-env
+
+curdir=$(pwd)
+module=${PWD##*/}	#toma nombre del directorio
+deploy=/tmp/$module-deploy.zip
+
+cd "./src"; zip -rq $deploy . -x "node_modules/aws-sdk/*"; cd $curdir
+
+aws lambda delete-function --function-name $module
+
+aws lambda create-function \
+--region $REGION \
+--function-name $module  \
+--zip-file fileb://$deploy \
+--role $ROLE \
+--handler index.handler \
+--runtime nodejs6.10 \
+--profile $PROFILE
+
+# --environment "Variables={API_URL=Ponerla,API_STAGE=Test}" \
+
+rm $deploy

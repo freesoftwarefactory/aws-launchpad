@@ -1,0 +1,11 @@
+# this script should be execute inside directory: /lambda/<function>/
+#
+source ./../../set-env	# we are inside: /<?>/fileuploader/lambda/<any>/
+
+curdir=$(pwd)
+module=${PWD##*/}	#toma nombre del directorio
+entrypoint=src/index.js
+main=./../../bin/local-execute-lambda.js
+lambda=$curdir/$entrypoint
+
+node $main $module $lambda
