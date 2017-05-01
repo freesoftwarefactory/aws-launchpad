@@ -8,5 +8,5 @@ cd "./src"; zip -rq $deploy . -x "node_modules/aws-sdk/*"; cd $curdir
 
 unzip -v $deploy
 
-aws lambda update-function-code --function-name $module --zip-file fileb:///$deploy
+aws lambda update-function-code --profile "$PROFILE" --function-name $module --zip-file fileb:///$deploy
 rm $deploy

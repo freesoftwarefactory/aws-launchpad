@@ -6,7 +6,7 @@ deploy=/tmp/$module-deploy.zip
 
 cd "./src"; zip -rq $deploy . -x "node_modules/aws-sdk/*"; cd $curdir
 
-aws lambda delete-function --function-name $module
+aws lambda delete-function --profile "$PROFILE" --function-name $module
 
 aws lambda create-function \
 --region $REGION \
@@ -15,7 +15,7 @@ aws lambda create-function \
 --role $ROLE \
 --handler index.handler \
 --runtime nodejs6.10 \
---profile $PROFILE
+--profile "$PROFILE"
 
 # --environment "Variables={API_URL=Ponerla,API_STAGE=Test}" \
 
