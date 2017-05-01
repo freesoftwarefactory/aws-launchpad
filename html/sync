@@ -1,0 +1,8 @@
+#!/bin/bash
+source ./../set-env	
+
+curdir=$(pwd)
+
+cd files;
+aws s3 sync . --region $WWW_REGION s3://$WWW_BUCKET 
+cd $curdir

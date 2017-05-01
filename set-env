@@ -10,6 +10,10 @@ ACCOUNT_ID=99999999999
 # the default region to be used
 REGION=us-west-2
 
+# static website hosting parameters (see ./html/sync and ./html/files)
+WWW_REGION=us-west-2
+WWW_BUCKET=someBucketName
+
 # the default role used by the aws create-lambda command.
 ROLE=arn:aws:iam::999999999999:role/SomeRole
 
