@@ -4,5 +4,7 @@ source ./../set-env
 curdir=$(pwd)
 
 cd files;
-aws s3 sync . --region $WWW_REGION s3://$WWW_BUCKET 
+# upload files from the cur directory to the destination bucket,
+# also, making it public files.
+aws s3 sync . s3://$WWW_BUCKET --region $WWW_REGION --acl public-read 
 cd $curdir
