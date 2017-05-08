@@ -1,6 +1,6 @@
 # Local Server
 
-Serve local lambda functions via http endpoints.
+Serve your local lambda functions via fully configurable http endpoints.
 	
 author:  Cristian Salazar <christiansalazarh@gmail.com>
 
@@ -12,8 +12,21 @@ author:  Cristian Salazar <christiansalazarh@gmail.com>
 
 ## Configure
 
-A sample file is provided: local-server.json , which must have endpoint
-definitions, see example:
+A sample file is provided: 
+
+	local-server.json 
+	
+which must have your endpoint definitions. This example provides you
+with a endpoint:
+
+	http://localhost:8100/property/123456
+
+which will execute the local lambda code at: 
+
+	"/your/project/lambda/RetsApiGetProperty/src"
+
+the result from your lambda function will be echoed to the browser as
+a "application/json", and provides some basic CORS headers too (as an example)
 
 ```
 {
