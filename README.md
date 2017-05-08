@@ -21,6 +21,10 @@ Once installed, you create a new lambda function in this way:
 
 ## How do i run my lambda function locally ?
 
+You have two ways: Direct Execution, or via Local Http Server
+
+Direct Execution:
+
 A file named 'event' is used as a input for your lambda function, on this
 file you put a JSON file structure or anything you pretend to pass to your
 lambda function from the 'Integration Request' (see aws web client)
@@ -32,6 +36,12 @@ lambda function from the 'Integration Request' (see aws web client)
 	# will execute your local lambda function (the 'event' is parsed)
 	./execute
 ```
+
+
+Local Http Server:
+
+A local server is provided to you in order to serve your lambda functions
+locally, please read more about it (see: Local Server).
 
 ## How do i create (or update) my remote lambda function ?
 
@@ -47,6 +57,13 @@ This steps requires you put some special data in the ./set-env file.
 	# will perform a code update of your remote real-world lambda function
 	./update
 ```
+
+## Local Server
+
+A local http server can be executed in order to serve lambda functions
+similar to Aws Apigateway.
+
+[Read more](./server/README.md)
 
 ## Very simple uh ?
 

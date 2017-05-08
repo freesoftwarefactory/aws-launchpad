@@ -1,0 +1,22 @@
+{
+	 "port" : 8100
+	,"routes" : {
+		"\/property\/([0-9]+)" : {
+			"vars"	 : ["{sysid}"],
+			"lambda" : { "name" : "RetsApiGetProperty" , "exports" : "handler" },
+			"GET" : {
+				"event"  : { 
+					"development" : true,
+					"params" : { "path" : { "sysid" : "{sysid}" } }					
+				},
+				"context" : {
+					
+				},
+				"responseHeaders" : {
+					"Access-Control-Allow-Origin" : "http://coquito.local",
+					"content-type" : "application/json"		
+				}
+			}
+		}
+	}
+}
