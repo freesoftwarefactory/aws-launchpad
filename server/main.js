@@ -57,15 +57,19 @@ var executeRoute = function(route, request, response){
 	var methodInfo = route[request.method];
 	if((null == methodInfo) || (undefined==methodInfo)){
 		// method not supported
-		console.log("[method "+request.method
-			+" not supported in your route definition]");
-		return;	
+		var msg = "[method "+request.method
+			+" not supported in your route definition]";
+		return new Promise((resolve,reject) => {
+			reject({ route: route, request: request, response: response , msg: msg});
+		});
 	}	
 	var event = replaceVariables(methodInfo.event, route.values);
+	event.body = "THE_BODY";
 	var context = methodInfo.context;
 	// execute the lambda function:
 	var path = process.env.PWD+"/../lambda/"+route.lambda.name+"/src";
 	console.log("execute: "+route.lambda.name,"("+path+")");
+	console.log("method:"+request.method+", body="+event.body);
 	// this environment var can be used inside lambda functions
 	process.env.LAMBDA_DIR=path;
 	var lambda = require(path);
@@ -97,14 +101,17 @@ http.createServer(function(request, response) {
 	var route = findRoute(def.routes,path);	
 	if(route){
 		try{
+			console.log("values:",route.values);
+			console.log("headers:",request.headers);
 			executeRoute(route, request, response).then(function(r){
 				r.response.writeHead(200, r.method.responseHeaders);
 				r.response.write(
 					("string" == (typeof r.payload)) ? r.payload 
 						: JSON.stringify(r.payload));
 				r.response.end();
-			}).catch(function(err){
-				console.log("executeRoute Promise.catch",err);
+			}).catch(function(r){
+				console.log("executeRoute Promise.catch:",r.msg);
+				r.response.end();
 			});	
 		}catch(ex){
 			console.log("exception at route level:",ex,"route:",route);
