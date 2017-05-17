@@ -64,26 +64,36 @@ var executeRoute = function(route, request, response){
 		});
 	}	
 	var event = replaceVariables(methodInfo.event, route.values);
-	event.body = "THE_BODY";
+	event.body = null;
 	var context = methodInfo.context;
 	// execute the lambda function:
 	var path = process.env.PWD+"/../lambda/"+route.lambda.name+"/src";
 	console.log("execute: "+route.lambda.name,"("+path+")");
-	console.log("method:"+request.method+", body="+event.body);
 	// this environment var can be used inside lambda functions
 	process.env.LAMBDA_DIR=path;
 	var lambda = require(path);
 	return new Promise((resolve,reject) => {
-		// TODO: use route.lambda.handler insted of hardwired "handler()"
-		lambda.handler(event,context,function(err,data){
-			if(err){
-				reject(err);	
-			}else{
-				resolve({ route: route, event: event, 
-					method : methodInfo, payload: data,
-						request: request, response: response });	
-			}
-		});
+		var doJob = function(){
+			// TODO: use route.lambda.handler insted of hardwired "handler()"
+			lambda.handler(event,context,function(err,data){
+				if(err){
+					reject(err);	
+				}else{
+					resolve({ route: route, event: event, 
+						method : methodInfo, payload: data,
+							request: request, response: response });	
+				}
+			});
+		};
+		if('POST'==request.method){
+			var chunks = [];
+			request.on('data',chunk => chunks.push(chunk));
+			request.on('end',()=>{
+				event.body = Buffer.concat(chunks);
+				doJob();
+			});
+		}else
+		doJob();
 	});
 };
 
