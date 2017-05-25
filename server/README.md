@@ -54,11 +54,13 @@ a "application/json", and provides some basic CORS headers too (as an example)
 
 ## Processing Paths and Reading Variables from a Path:
 
-As an example, in order to get values "123" and "ABC" from a provided path:
-		
-	/property/123/ABC
+Lets suppose you provide some value via path, something like this:
 
-you should provide a expression similar to this one in lambda-server.json:
+	http://localhost:8100/property/123/ABC
+
+In order to get the provided values ("123" and "ABC") from inside a lambda
+function you must provide a setup via file 'lambda-server.json',
+using a regular expression similar to this one in your route definition:
 
 ```
 "routes" : {
@@ -66,23 +68,16 @@ you should provide a expression similar to this one in lambda-server.json:
 }, ... 
 ```
 
-on a successfull execution this method returns something similar to:
+Take a look at the sample rule definition (see: Configure) it provides
+a setup for the 'events' object, this object will be passed to your lambda
+function:
 
 ```
-{ 
-	vars: [ '{sysid}', '{other}' ],
- 	lambda: 'RetsApiGetProperty',
-    method: 'GET',
-	event: { development: true, params: { path: { "sysid" : "{sysid}" } } },
-	response: { 'content-type': 'application/json' },
-	
-	// this attribute is created by this method:
-	values: { 
-		'{sysid}': '123', 
-		'{other}': 'ABC' 
-	} 
-}
-```	
+"event"  : { 
+	"development" : true,
+	"params" : { "path" : { "sysid" : "{sysid}" } }					
+},
+```
 
 Note the "event" object and The variable "{sysid}", which has been parsed
 and now it has the value '123' taken from the path. This value is passed
@@ -90,6 +85,9 @@ to your 'event' object, so in your lambda function you can read it by using
 a call similar to this one:
 
 	console.log(event.params.path.sysid); // output: 123
+
+Please note i have added two values in the path: ABC and 123, so the order
+used to set the values should match the 'vars' attribute.
 
 ## Variable Names:
 
