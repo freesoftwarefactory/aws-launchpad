@@ -68,9 +68,19 @@ using a regular expression similar to this one in your route definition:
 }, ... 
 ```
 
+The next step is to provide the var names definition in the 'vars' attribute:
+
+```
+...
+"\/property\/([0-9]+)/([a-z]+)" : {
+	"vars"	 : ["{sysid}","{other}"],
+	...
+}
+```
+
 Take a look at the sample rule definition (see: Configure) it provides
 a setup for the 'events' object, this object will be passed to your lambda
-function:
+function and can receive the values in this way:
 
 ```
 "event"  : { 
@@ -85,9 +95,6 @@ to your 'event' object, so in your lambda function you can read it by using
 a call similar to this one:
 
 	console.log(event.params.path.sysid); // output: 123
-
-Please note i have added two values in the path: ABC and 123, so the order
-used to set the values should match the 'vars' attribute.
 
 ## Variable Names:
 
