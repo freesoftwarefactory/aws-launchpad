@@ -52,7 +52,7 @@ which will execute the local lambda code at:
 the result from your lambda function will be echoed to the browser as
 a "application/json", and provides some basic CORS headers too (as an example)
 
-## Processing Paths:
+## Processing Paths and Reading Variables from a Path:
 
 As an example, in order to get values "123" and "ABC" from a provided path:
 		
@@ -73,7 +73,7 @@ on a successfull execution this method returns something similar to:
 	vars: [ '{sysid}', '{other}' ],
  	lambda: 'RetsApiGetProperty',
     method: 'GET',
-	event: { development: true, params: { path: [Object] } },
+	event: { development: true, params: { path: { "sysid" : "{sysid}" } } },
 	response: { 'content-type': 'application/json' },
 	
 	// this attribute is created by this method:
@@ -83,6 +83,13 @@ on a successfull execution this method returns something similar to:
 	} 
 }
 ```	
+
+Note the "event" object and The variable "{sysid}", which has been parsed
+and now it has the value '123' taken from the path. This value is passed
+to your 'event' object, so in your lambda function you can read it by using
+a call similar to this one:
+
+	console.log(event.params.path.sysid); // output: 123
 
 ## Variable Names:
 
