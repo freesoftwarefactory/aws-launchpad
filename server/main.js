@@ -4,7 +4,6 @@
 	author:  Cristian Salazar <christiansalazarh@gmail.com>
 */
 var fs = require("fs");
-var http = require("http");
 var url = require("url");
 var def = JSON.parse(fs.readFileSync("../local-server.json"));
 
@@ -97,15 +96,7 @@ var executeRoute = function(route, request, response){
 	});
 };
 
-/*entry point*/
-
-console.log("http://localhost:"+def.port+" (control+c)");
-
-process.on('uncaughtException', function(err) {
-	console.log("(unhandled exception)",err)
-});
-
-http.createServer(function(request, response) {
+var handler = function(request, response) {
 	var path = url.parse(request.url).pathname;
 	try{
 	var route = findRoute(def.routes,path);	
@@ -134,5 +125,23 @@ http.createServer(function(request, response) {
 		console.log("exception (path="+path+")",ex);	
 		response.end();
 	}
-}).listen(def.port);
+};
+
+process.on('uncaughtException', function(err) {
+	console.log("(unhandled exception)",err)
+});
+
+/*entry point*/
+if(true == def.secure){
+	var proto = require("https");
+	var key = fs.readFileSync(def.privatekey).toString();
+	var cert = fs.readFileSync(def.certificate).toString();
+	console.log("https://localhost:"+def.port+" (is now active) using:\n"
+		+"cert:"+def.certificate+"\nkey:"+def.privatekey+"\n");
+	proto.createServer({key:key,cert:cert},handler).listen(def.port);
+}else{
+	var proto = require("http");
+	console.log("http://localhost:"+def.port+" (is now active)");	
+	proto.createServer(handler).listen(def.port);
+}
 

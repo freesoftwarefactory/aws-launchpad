@@ -1,5 +1,8 @@
 {
 	 "port" : 8100
+	,"secure" : false
+	,"privatekey" : "/your/cert/some.key"
+	,"certificate" : "/your/cert/some.crt"
 	,"routes" : {
 		"\/property\/([0-9]+)" : {
 			"vars"	 : ["{sysid}"],

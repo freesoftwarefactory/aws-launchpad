@@ -52,6 +52,22 @@ which will execute the local lambda code at:
 the result from your lambda function will be echoed to the browser as
 a "application/json", and provides some basic CORS headers too (as an example)
 
+## HTTPS
+
+You can server HTTPS endpoint by adding this attributes to your setup in
+local-server.json:
+
+```
+	,"port" : 8443
+	,"secure" : true
+	,"privatekey" : "/your/cert/some.key"
+	,"certificate" : "/your/cert/some.crt"
+```
+
+So, in consecuence you will have a https endpoint:
+
+	https://localhost:8443/
+
 ## Processing Paths and Reading Variables from a Path:
 
 Lets suppose you provide some value via path, something like this:
